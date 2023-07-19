@@ -15,7 +15,7 @@ export default function Home() {
 
   async function getQuestions(){
     try {
-        const response = await fetch("https://opentdb.com/api.php?amount=5");
+        const response = await fetch(`https://opentdb.com/api.php?amount=5${document.getElementById('category').value}${document.getElementById('difficulty').value}`);
         const data = await response.json();
         dataHandler(data.results);
     } catch (error) {
@@ -59,6 +59,7 @@ function combine(allAns, allQuest){
       const EverythingArray = {...allQuest[i], answers: allAns[i]}
       popi.push(EverythingArray)
   }
+  window.scrollTo(0, 0)
   setQuestion(popi)
   setStart(true)
   setCheckBtn(true)
@@ -68,6 +69,7 @@ function combine(allAns, allQuest){
   let quest = question.map(currentQuestion => {
       return (
         <Question 
+        start={start}
         question={currentQuestion.question} 
         id={currentQuestion.id}
         key={currentQuestion.id}
@@ -147,16 +149,27 @@ function combine(allAns, allQuest){
           ans2 = {...answers, answers: ans1}
           ans3.push(ans2)
         })
+        window.scrollTo(0, 0)
         setCorrect(correctAns)
         setCheckBtn(false)
         setTryAgainBtn(true)
         return ans3
       })
     }
+
+    function returnToMenu(){
+      setStart(false)
+      setCheckBtn(false)
+      setTryAgainBtn(false)
+    }
   
   return (
     <main>
     <Start clickHandler={getQuestions} start={start}/>
+    <nav id="nav" className={start ? styles.nav : styles.start}>
+      <h2>Quizzical</h2>
+      <button onClick={returnToMenu}>Return to menu</button>
+    </nav>
     {quest}
     <button className={checkBtn ? styles.btn: styles.start} onClick={checkAnswers}>Check answers</button>
     <button className={tryAgainBtn ? styles.btn : styles.start} onClick={getQuestions}>Try again!</button>

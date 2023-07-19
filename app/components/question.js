@@ -17,7 +17,7 @@ export default function Question(props) {
     
    
     return (
-        <div className={styles.container} id={props.id}>
+        <div className={props.start ? styles.container : styles.none} id={props.id}>
             <h4 className={styles.question}>{props.question}</h4>
             <div className={styles.answers}>
               {ans} 
